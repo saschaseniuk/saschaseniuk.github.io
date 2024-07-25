@@ -108,6 +108,12 @@
         const csvUrl = 'blogsafari.csv';
         let data = [];
 
+        function normalizeDomain(domain) {
+            return domain.toLowerCase()
+                         .replace(/^(https?:\/\/)?(www\.)?/, '')
+                         .replace(/\/$/, '');
+        }
+
         async function loadCSV() {
             try {
                 const response = await fetch(csvUrl);
@@ -116,7 +122,7 @@
                 data = rows.map(row => {
                     const [domain, domainRating, organicTraffic, organicKeywords] = row.split(',');
                     return {
-                        domain,
+                        domain: normalizeDomain(domain),
                         domainRating: parseFloat(domainRating.replace(',', '.')),
                         organicTraffic: parseInt(organicTraffic),
                         organicKeywords: parseInt(organicKeywords)
