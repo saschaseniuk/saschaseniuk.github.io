@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Domain Leaderboard</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        th {
+            background-color: #3498db;
+            color: #fff;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        th:hover {
+            background-color: #2980b9;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #e8f4fd;
+        }
+
+        .top-30 {
+            background-color: #d5f5e3;
+        }
+
+        .top-30:nth-child(even) {
+            background-color: #c8f1d9;
+        }
+
+        .rank {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .sort-icon::after {
+            content: ' ▼';
+            font-size: 0.8em;
+            margin-left: 5px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        tbody tr {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <h1>Domain Leaderboard</h1>
+    <table id="leaderboardTable">
+        <thead>
+            <tr>
+                <th>Rang</th>
+                <th data-sort="domain">Domain</th>
+                <th data-sort="domainRating">Domain Rating</th>
+                <th data-sort="organicTraffic">Organic Traffic</th>
+                <th data-sort="organicKeywords">Organic Keywords</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        const csvUrl = 'blogsafari.csv';
+        let data = [];
+
+        async function loadCSV() {
+            try {
+                const response = await fetch(csvUrl);
+                const csvText = await response.text();
+                const rows = csvText.split('\n').slice(1);
+                data = rows.map(row => {
+                    const [domain, domainRating, organicTraffic, organicKeywords] = row.split(',');
+                    return {
+                        domain,
+                        domainRating: parseFloat(domainRating.replace(',', '.')),
+                        organicTraffic: parseInt(organicTraffic),
+                        organicKeywords: parseInt(organicKeywords)
+                    };
+                }).filter(item => !isNaN(item.domainRating));
+                sortAndDisplayData('domainRating');
+            } catch (error) {
+                console.error('Error loading CSV:', error);
+            }
+        }
+
+        function sortAndDisplayData(sortBy) {
+            data.sort((a, b) => {
+                if (sortBy === 'domain') {
+                    return a[sortBy].localeCompare(b[sortBy]);
+                } else {
+                    return b[sortBy] - a[sortBy];
+                }
+            });
+            const tbody = document.querySelector('#leaderboardTable tbody');
+            tbody.innerHTML = '';
+            data.forEach((item, index) => {
+                const row = tbody.insertRow();
+                row.style.animationDelay = `${index * 30}ms`;
+                if (index < 30) {
+                    row.classList.add('top-30');
+                }
+                row.insertCell().innerHTML = `<span class="rank">${index + 1}</span>`;
+                row.insertCell().textContent = item.domain;
+                row.insertCell().textContent = item.domainRating.toFixed(1);
+                row.insertCell().textContent = item.organicTraffic;
+                row.insertCell().textContent = item.organicKeywords;
+            });
+            updateSortIcon(sortBy);
+        }
+
+        function updateSortIcon(sortBy) {
+            document.querySelectorAll('th').forEach(th => {
+                th.classList.remove('sort-icon');
+                if (th.dataset.sort === sortBy) {
+                    th.classList.add('sort-icon');
+                }
+            });
+        }
+
+        document.querySelectorAll('th[data-sort]').forEach(th => {
+            th.addEventListener('click', () => {
+                const sortBy = th.dataset.sort;
+                sortAndDisplayData(sortBy);
+            });
+        });
+
+        loadCSV();
+    </script>
+</body>
+</html>
