@@ -64,7 +64,8 @@
         function normalizeDomain(domain) {
             return domain.toLowerCase()
                          .replace(/^(https?:\/\/)?(www\.)?/, '')
-                         .replace(/\/$/, '');
+                         .replace(/\/$/, '')
+                         .split('/')[0]; // Ensure we only get the domain part
         }
 
         function removeDuplicates(data) {
@@ -84,14 +85,16 @@
                 const csvText = await response.text();
                 const rows = csvText.split('\n').slice(1);
                 const data = rows.map(row => {
-                    const [domain, domainRating, organicTraffic, organicKeywords] = row.split(',');
+                    const [domain, ...rest] = row.split(',');
+                    if (!domain) return null; // Skip empty rows
+                    const [domainRating, organicTraffic, organicKeywords] = rest.slice(-3); // Take last 3 elements
                     return {
                         domain: normalizeDomain(domain),
                         domainRating: parseFloat(domainRating.replace(',', '.')),
                         organicTraffic: parseInt(organicTraffic),
                         organicKeywords: parseInt(organicKeywords)
                     };
-                }).filter(item => !isNaN(item.domainRating));
+                }).filter(item => item && !isNaN(item.domainRating));
                 return removeDuplicates(data);
             } catch (error) {
                 console.error('Error loading CSV:', error);
