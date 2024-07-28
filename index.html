@@ -95,10 +95,6 @@
             0% { box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #ff00de, 0 0 35px #ff00de, 0 0 40px #ff00de, 0 0 50px #ff00de, 0 0 75px #ff00de; }
             100% { box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #ff00de, 0 0 70px #ff00de, 0 0 80px #ff00de, 0 0 100px #ff00de, 0 0 150px #ff00de; }
         }
-        .glow {
-            animation: glow 1s ease-in-out infinite alternate;
-            transition: all 0.5s ease-in-out;
-        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-blue-100 to-purple-100 dark:from-gray-900 dark:to-blue-900 min-h-screen flex flex-col items-center justify-center text-gray-800 dark:text-gray-200 text-lg">
@@ -135,17 +131,12 @@
         <a href="impressum.html" class="text-primary hover:underline">Impressum</a>
     </footer>
 
-    <div class="fixed top-4 right-4 flex items-center">
-        <div id="darkModeContainer" class="flex items-center bg-gray-200 dark:bg-gray-700 rounded-lg shadow-lg transition-all duration-300 cursor-pointer" onclick="toggleDarkMode()">
-            <span id="darkModeHint" class="p-2 transition-opacity duration-300">
-                Switch dark mode!
-            </span>
-            <div id="darkModeToggle" class="p-2 rounded-full">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                </svg>
-            </div>
-        </div>
+    <div class="fixed top-4 right-4">
+        <button id="darkModeToggle" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700 shadow-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+        </button>
     </div>
 
     <script>
@@ -154,20 +145,11 @@
         let newData = [];
         let oldData = [];
 
-        function handleDarkModeHint() {
-            const darkModeContainer = document.getElementById('darkModeContainer');
-            darkModeContainer.classList.add('glow');
-        }
-
-        window.addEventListener('load', handleDarkModeHint);
-
         function toggleDarkMode() {
             document.documentElement.classList.toggle('dark');
-            const darkModeContainer = document.getElementById('darkModeContainer');
-            const darkModeHint = document.getElementById('darkModeHint');
-            darkModeHint.style.opacity = '0';
-            darkModeContainer.style.width = '40px';
         }
+
+        document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
 
         function createFirework(x, y) {
             const glitterContainer = document.querySelector('.glitter-container');
