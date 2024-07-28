@@ -38,6 +38,15 @@
             .normal-table tr:nth-child(odd) {
                 @apply bg-white bg-opacity-5;
             }
+            @media (min-width: 768px) {
+                .normal-table {
+                    @apply text-base;
+                }
+                .normal-table th,
+                .normal-table td {
+                    @apply p-3;
+                }
+            }
         }
     </style>
     <style>
