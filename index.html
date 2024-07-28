@@ -95,6 +95,13 @@
                         organicKeywords: parseInt(organicKeywords)
                     };
                 }).filter(item => item && !isNaN(item.domainRating));
+
+                // Normalize Domain Rating to ensure it's between 0 and 100
+                data.forEach(item => {
+                    if (item.domainRating < 1) {
+                        item.domainRating *= 100;
+                    }
+                });
                 return removeDuplicates(data);
             } catch (error) {
                 console.error('Error loading CSV:', error);
@@ -146,6 +153,7 @@
                 
                 const drCell = row.insertCell();
                 drCell.textContent = item.domainRating.toFixed(1);
+                drCell.title = `Original value: ${item.domainRating}`;
                 drCell.className = 'py-3';
                 drCell.innerHTML += getChangeIndicator(item.domainRating, oldItem?.domainRating);
                 
