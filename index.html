@@ -136,7 +136,7 @@
     </footer>
 
     <div class="fixed top-4 right-4 flex items-center">
-        <div id="darkModeContainer" class="flex items-center bg-gray-200 dark:bg-gray-700 rounded-lg shadow-lg transition-all duration-300 cursor-pointer">
+        <div id="darkModeContainer" class="flex items-center bg-gray-200 dark:bg-gray-700 rounded-lg shadow-lg transition-all duration-300 cursor-pointer" onclick="toggleDarkMode()">
             <span id="darkModeHint" class="p-2 transition-opacity duration-300">
                 Switch dark mode!
             </span>
@@ -168,16 +168,6 @@
             darkModeHint.style.opacity = '0';
             darkModeContainer.style.width = '40px';
         }
-
-        function setupDarkModeToggle() {
-            const darkModeContainer = document.getElementById('darkModeContainer');
-            darkModeContainer.addEventListener('click', toggleDarkMode);
-        }
-
-        setupDarkModeToggle();
-
-        // Ensure the dark mode toggle functionality remains active
-        setInterval(setupDarkModeToggle, 1000);
 
         function createFirework(x, y) {
             const glitterContainer = document.querySelector('.glitter-container');
