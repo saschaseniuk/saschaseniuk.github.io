@@ -135,14 +135,16 @@
     </footer>
 
     <div class="fixed top-4 right-4 flex items-center">
-        <span id="darkModeHint" class="mr-2 bg-gray-200 dark:bg-gray-700 p-2 rounded-lg shadow-lg transition-opacity duration-300">
-            Switch dark mode!
-        </span>
-        <button id="darkModeToggle" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-            </svg>
-        </button>
+        <div id="darkModeContainer" class="flex items-center bg-gray-200 dark:bg-gray-700 rounded-lg shadow-lg transition-all duration-300">
+            <span id="darkModeHint" class="p-2 transition-opacity duration-300">
+                Switch dark mode!
+            </span>
+            <button id="darkModeToggle" class="p-2 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+            </button>
+        </div>
     </div>
 
     <script>
@@ -152,17 +154,27 @@
         let oldData = [];
 
         function handleDarkModeHint() {
+            const darkModeContainer = document.getElementById('darkModeContainer');
             const darkModeHint = document.getElementById('darkModeHint');
-            darkModeHint.classList.add('glow');
+            darkModeContainer.classList.add('glow');
             setTimeout(() => {
-                darkModeHint.classList.remove('glow');
+                darkModeContainer.classList.remove('glow');
             }, 5000);
             setTimeout(() => {
                 darkModeHint.style.opacity = '0';
+                darkModeContainer.style.width = '40px';
             }, 10000);
         }
 
         window.addEventListener('load', handleDarkModeHint);
+
+        document.getElementById('darkModeToggle').addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            const darkModeContainer = document.getElementById('darkModeContainer');
+            const darkModeHint = document.getElementById('darkModeHint');
+            darkModeHint.style.opacity = '0';
+            darkModeContainer.style.width = '40px';
+        });
 
         function createFirework(x, y) {
             const glitterContainer = document.querySelector('.glitter-container');
