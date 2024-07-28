@@ -53,9 +53,9 @@
                 opacity: 0;
             }
         }
-        @keyframes shuffle {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(10px); }
+        .blurred {
+            filter: blur(5px);
+            transition: filter 0.5s ease-in-out;
         }
     </style>
 </head>
@@ -134,42 +134,26 @@
             return interval;
         }
 
-        function shuffleLeaderboard() {
+        function blurLeaderboard() {
             const tbody = document.querySelector('#leaderboardTable tbody');
-            const rows = Array.from(tbody.querySelectorAll('tr'));
-            
-            let shuffleCount = 0;
-            const shuffleInterval = setInterval(() => {
-                rows.forEach(row => {
-                    row.style.animation = `shuffle 0.5s ease-in-out`;
-                });
-                setTimeout(() => {
-                    rows.sort(() => Math.random() - 0.5);
-                    tbody.innerHTML = '';
-                    rows.forEach(row => tbody.appendChild(row));
-                }, 250);
-                
-                shuffleCount++;
-                if (shuffleCount >= 10) {
-                    clearInterval(shuffleInterval);
-                    setTimeout(() => {
-                        sortAndDisplayData('organicTraffic');
-                    }, 500);
-                }
-            }, 500);
+            tbody.classList.add('blurred');
+        }
 
-            return shuffleInterval;
+        function unblurLeaderboard() {
+            const tbody = document.querySelector('#leaderboardTable tbody');
+            tbody.classList.remove('blurred');
         }
 
         window.addEventListener('load', () => {
             const fireworksInterval = showFireworks();
             setTimeout(() => {
                 document.getElementById('leaderboardContainer').style.opacity = '1';
-                const shuffleInterval = shuffleLeaderboard();
+                blurLeaderboard();
                 
                 setTimeout(() => {
                     clearInterval(fireworksInterval);
-                    clearInterval(shuffleInterval);
+                    unblurLeaderboard();
+                    sortAndDisplayData('organicTraffic');
                 }, 7000);
             }, 2000);
         });
