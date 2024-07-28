@@ -92,8 +92,8 @@
                     return {
                         domain: normalizeDomain(domain),
                         domainRating: parsedDR,
-                        organicTraffic: parseInt(organicTraffic),
-                        organicKeywords: parseInt(organicKeywords)
+                        organicTraffic: parseInt(organicTraffic.replace(',', '')),
+                        organicKeywords: parseInt(organicKeywords.replace(',', ''))
                     };
                 }).filter(item => item && !isNaN(item.domainRating));
 
@@ -159,8 +159,8 @@
                 }
                 
                 const drCell = row.insertCell();
-                drCell.textContent = item.domainRating < 1 ? item.domainRating.toString() : item.domainRating.toFixed(2);
-                drCell.title = `Original value: ${item.domainRating}`;
+                drCell.textContent = item.domainRating.toFixed(2);
+                drCell.title = `Original value: ${item.domainRating.toFixed(2)}`;
                 drCell.className = 'py-3';
                 drCell.innerHTML += getChangeIndicator(item.domainRating, oldItem?.domainRating);
                 
