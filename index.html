@@ -226,9 +226,10 @@
             // Remove glow effect
             darkModeContainer.classList.remove('glow');
             
-            // Smooth transition for the hint
-            darkModeHint.style.transition = 'opacity 1s ease-in-out, width 1s ease-in-out';
+            // Slower and smoother transition for the hint
+            darkModeHint.style.transition = 'opacity 3s ease-in-out, width 3s ease-in-out';
             darkModeHint.style.opacity = '0';
+            darkModeContainer.style.transition = 'width 3s ease-in-out';
             darkModeContainer.style.width = '40px';
         }
 
