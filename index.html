@@ -97,11 +97,15 @@
                     };
                 }).filter(item => item && !isNaN(item.domainRating));
 
-                // Normalize Domain Rating to ensure it's between 0 and 100
+                // Ensure Domain Rating is between 0 and 100
                 data.forEach(item => {
-                    if (item.domainRating < 1) {
-                        item.domainRating = Math.round(item.domainRating * 100) / 100;
+                    if (item.domainRating > 100) {
+                        item.domainRating = 100;
+                    } else if (item.domainRating < 0) {
+                        item.domainRating = 0;
                     }
+                    // Round to two decimal places
+                    item.domainRating = Math.round(item.domainRating * 100) / 100;
                 });
                 return removeDuplicates(data);
             } catch (error) {
