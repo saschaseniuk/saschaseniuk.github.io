@@ -91,6 +91,14 @@
             filter: blur(0);
             transition: filter 1s ease-in-out;
         }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+        .bounce {
+            animation: bounce 0.5s infinite;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-blue-100 to-purple-100 dark:from-gray-900 dark:to-blue-900 min-h-screen flex flex-col items-center justify-center text-gray-800 dark:text-gray-200 text-lg">
@@ -151,6 +159,16 @@
         }
 
         window.addEventListener('scroll', handleScroll);
+
+        function startBounceAnimation() {
+            const darkModeHint = document.getElementById('darkModeHint');
+            darkModeHint.classList.add('bounce');
+            setTimeout(() => {
+                darkModeHint.classList.remove('bounce');
+            }, 5000);
+        }
+
+        window.addEventListener('load', startBounceAnimation);
 
         function createFirework(x, y) {
             const glitterContainer = document.querySelector('.glitter-container');
