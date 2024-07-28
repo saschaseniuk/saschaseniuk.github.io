@@ -1,148 +1,59 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Domain Leaderboard</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
-
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f5f7fa;
-            color: #333;
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3498db',
+                        secondary: '#2c3e50',
+                    },
+                },
+            },
         }
-
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 30px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            background-color: #fff;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        th, td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #ecf0f1;
-        }
-
-        th {
-            background-color: #3498db;
-            color: #fff;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        th:hover {
-            background-color: #2980b9;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f8f9fa;
-        }
-
-        tr:hover {
-            background-color: #e8f4fd;
-        }
-
-        .top-30 {
-            background-color: #d5f5e3;
-        }
-
-        .top-30:nth-child(even) {
-            background-color: #c8f1d9;
-        }
-
-        .rank {
-            font-weight: bold;
-            color: #2c3e50;
-        }
-
-        .sort-icon::after {
-            content: ' ▼';
-            font-size: 0.8em;
-            margin-left: 5px;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        tbody tr {
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        .change-indicator {
-            margin-left: 5px;
-            font-size: 0.8em;
-        }
-
-        .new-domain {
-            margin-left: 5px;
-            color: #f39c12;
-        }
-
-        .change-up {
-            color: #27ae60;
-        }
-
-        .change-down {
-            color: #c0392b;
-        }
-
-        footer {
-            margin-top: auto;
-            text-align: center;
-            padding: 20px 0;
-        }
-
-        footer a {
-            color: #3498db;
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .glass {
+                @apply bg-white bg-opacity-20 dark:bg-gray-800 dark:bg-opacity-20 backdrop-filter backdrop-blur-lg;
+            }
         }
     </style>
 </head>
-<body>
-    <h1>Domain Leaderboard</h1>
-    <table id="leaderboardTable">
-        <thead>
-            <tr>
-                <th>Rang</th>
-                <th data-sort="domain">Domain</th>
-                <th data-sort="domainRating">Domain Rating</th>
-                <th data-sort="organicTraffic">Organic Traffic</th>
-                <th data-sort="organicKeywords">Organic Keywords</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+<body class="bg-gradient-to-br from-blue-100 to-purple-100 dark:from-gray-900 dark:to-blue-900 min-h-screen flex flex-col items-center justify-center p-4 text-gray-800 dark:text-gray-200">
+    <div class="w-full max-w-4xl glass rounded-lg shadow-lg p-6 mb-8">
+        <h1 class="text-3xl font-bold text-center mb-6">Domain Leaderboard</h1>
+        <div class="overflow-x-auto">
+            <table id="leaderboardTable" class="w-full">
+                <thead>
+                    <tr class="bg-primary bg-opacity-80 text-white">
+                        <th class="p-3">Rang</th>
+                        <th class="p-3 cursor-pointer" data-sort="domain">Domain</th>
+                        <th class="p-3 cursor-pointer" data-sort="domainRating">Domain Rating</th>
+                        <th class="p-3 cursor-pointer" data-sort="organicTraffic">Organic Traffic</th>
+                        <th class="p-3 cursor-pointer" data-sort="organicKeywords">Organic Keywords</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
 
-    <footer>
-        <a href="impressum.html">Impressum</a>
+    <footer class="mt-auto text-center p-4">
+        <a href="impressum.html" class="text-primary hover:underline">Impressum</a>
     </footer>
+
+    <button id="darkModeToggle" class="fixed top-4 right-4 p-2 rounded-full bg-gray-200 dark:bg-gray-700">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+    </button>
 
     <script>
         const newCsvUrl = 'blogsafari.csv';
@@ -200,8 +111,8 @@
         function getChangeIndicator(newValue, oldValue) {
             if (oldValue === null) return '';
             const diff = newValue - oldValue;
-            if (diff > 0) return `<span class="change-indicator change-up">⬆️ ${diff.toFixed(1)}</span>`;
-            if (diff < 0) return `<span class="change-indicator change-down">⬇️ ${Math.abs(diff).toFixed(1)}</span>`;
+            if (diff > 0) return `<span class="text-green-500 ml-1">⬆️ ${diff.toFixed(1)}</span>`;
+            if (diff < 0) return `<span class="text-red-500 ml-1">⬇️ ${Math.abs(diff).toFixed(1)}</span>`;
             return '';
         }
 
@@ -217,18 +128,16 @@
             tbody.innerHTML = '';
             newData.forEach((item, index) => {
                 const row = tbody.insertRow();
+                row.className = index %2 === 0 ? 'bg-white bg-opacity-10' : 'bg-white bg-opacity-5';
                 row.style.animationDelay = `${index * 30}ms`;
-                if (index < 30) {
-                    row.classList.add('top-30');
-                }
                 const oldItem = getOldItem(item.domain);
                 
-                row.insertCell().innerHTML = `<span class="rank">${index + 1}</span>`;
+                row.insertCell().innerHTML = `<span class="font-bold">${index + 1}</span>`;
                 
                 const domainCell = row.insertCell();
                 domainCell.textContent = item.domain;
                 if (!oldItem) {
-                    domainCell.innerHTML += '<span class="new-domain">⭐</span>';
+                    domainCell.innerHTML += '<span class="text-yellow-400 ml-1">⭐</span>';
                 }
                 
                 const drCell = row.insertCell();
@@ -248,9 +157,9 @@
 
         function updateSortIcon(sortBy) {
             document.querySelectorAll('th').forEach(th => {
-                th.classList.remove('sort-icon');
+                th.classList.remove('after:content-["▼"]');
                 if (th.dataset.sort === sortBy) {
-                    th.classList.add('sort-icon');
+                    th.classList.add('after:content-["▼"]', 'after:ml-1', 'after:text-xs');
                 }
             });
         }
@@ -260,6 +169,10 @@
                 const sortBy = th.dataset.sort;
                 sortAndDisplayData(sortBy);
             });
+        });
+
+        document.getElementById('darkModeToggle').addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
         });
 
         loadData();
