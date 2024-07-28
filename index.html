@@ -97,9 +97,9 @@
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-blue-100 to-purple-100 dark:from-gray-900 dark:to-blue-900 min-h-screen flex flex-col items-center justify-center text-gray-800 dark:text-gray-200 text-lg">
+<body class="bg-gradient-to-br from-blue-100 to-purple-100 min-h-screen flex flex-col items-center justify-center text-gray-800 text-lg">
     <div class="glitter-container"></div>
-    <div id="leaderboardContainer" class="w-full max-w-5xl glass rounded-lg shadow-lg p-2 sm:p-8 mb-8" style="opacity: 0; transition: opacity 1s ease-in-out;">
+    <div id="leaderboardContainer" class="w-full max-w-5xl glass rounded-lg shadow-lg p-2 sm:p-8 mb-8">
         <h1 class="text-4xl font-bold text-center mb-4 pt-12 sm:pt-0">Blogsafari<br>Domain Leaderboard</h1>
         <p class="text-center mb-4"><span class="text-yellow-400">⭐</span> Neue Domains seit dem letzten Update</p>
         <div class="overflow-x-auto w-full">
@@ -176,52 +176,15 @@
             return interval;
         }
 
-        function blurLeaderboard() {
-            const tbody = document.querySelector('#leaderboardTable tbody');
-            tbody.classList.add('blurred');
-            tbody.classList.remove('unblurred');
-        }
-
-        function unblurLeaderboard() {
-            const tbody = document.querySelector('#leaderboardTable tbody');
-            tbody.classList.remove('blurred');
-            tbody.classList.add('unblurred');
-            
-            const darkModeContainer = document.getElementById('darkModeContainer');
-            const darkModeHint = document.getElementById('darkModeHint');
-            
-            // Gradual transition from glow to switch
-            setTimeout(() => {
-                darkModeContainer.style.transition = 'box-shadow 2s ease-in-out';
-                darkModeContainer.style.boxShadow = 'none';
-            }, 1000);
-
-            setTimeout(() => {
-                darkModeHint.style.transition = 'opacity 2s ease-in-out, width 2s ease-in-out';
-                darkModeHint.style.opacity = '0';
-                darkModeContainer.style.transition = 'width 2s ease-in-out, background-color 2s ease-in-out';
-                darkModeContainer.style.width = '40px';
-                darkModeContainer.style.backgroundColor = 'rgba(107, 114, 128, 0.5)'; // Adjust this color as needed
-            }, 3000);
-
-            setTimeout(() => {
-                darkModeContainer.classList.remove('glow');
-            }, 5000);
-        }
-
         window.addEventListener('load', () => {
             const fireworksInterval = showFireworks();
             setTimeout(() => {
                 document.getElementById('leaderboardContainer').style.opacity = '1';
-                blurLeaderboard();
                 
                 setTimeout(() => {
                     clearInterval(fireworksInterval);
-                    unblurLeaderboard();
                     sortAndDisplayData('organicTraffic');
-                    // Hide only the dark mode hint after the table unveils
-                    document.getElementById('darkModeHint').style.display = 'none';
-                }, 7000);
+                }, 5000);
             }, 2000);
         });
 
@@ -356,10 +319,6 @@
                 const sortBy = th.dataset.sort;
                 sortAndDisplayData(sortBy);
             });
-        });
-
-        document.getElementById('darkModeToggle').addEventListener('click', () => {
-            document.documentElement.classList.toggle('dark');
         });
 
         loadData();
