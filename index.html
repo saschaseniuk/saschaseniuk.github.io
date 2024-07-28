@@ -25,21 +25,18 @@
             }
         }
         @layer components {
-            .responsive-table {
+            .normal-table {
                 @apply w-full text-left border-collapse text-sm;
             }
-            .responsive-table thead {
-                @apply hidden md:table-header-group;
+            .normal-table th,
+            .normal-table td {
+                @apply p-2;
             }
-            .responsive-table tr {
-                @apply block md:table-row mb-4 md:mb-0;
+            .normal-table tr:nth-child(even) {
+                @apply bg-white bg-opacity-10;
             }
-            .responsive-table td {
-                @apply block md:table-cell;
-            }
-            .responsive-table td:before {
-                content: attr(data-label);
-                @apply font-bold md:hidden inline-block w-1/3;
+            .normal-table tr:nth-child(odd) {
+                @apply bg-white bg-opacity-5;
             }
         }
     </style>
@@ -86,14 +83,14 @@
     <div id="leaderboardContainer" class="w-full max-w-5xl glass rounded-lg shadow-lg p-8 mb-8" style="opacity: 0; transition: opacity 1s ease-in-out;">
         <h1 class="text-4xl font-bold text-center mb-8">Blogsafari - Domain Leaderboard</h1>
         <div class="overflow-x-auto">
-            <table id="leaderboardTable" class="responsive-table">
+            <table id="leaderboardTable" class="normal-table">
                 <thead>
                     <tr class="bg-primary bg-opacity-80 text-white">
-                        <th class="p-2 pl-4">Rang</th>
-                        <th class="p-2 cursor-pointer" data-sort="domain">Domain</th>
-                        <th class="p-2 cursor-pointer" data-sort="organicTraffic">Traffic</th>
-                        <th class="p-2 cursor-pointer" data-sort="domainRating">DR</th>
-                        <th class="p-2 cursor-pointer" data-sort="organicKeywords">KW</th>
+                        <th class="cursor-pointer" data-sort="rank">Rang</th>
+                        <th class="cursor-pointer" data-sort="domain">Domain</th>
+                        <th class="cursor-pointer" data-sort="organicTraffic">Traffic</th>
+                        <th class="cursor-pointer" data-sort="domainRating">DR</th>
+                        <th class="cursor-pointer" data-sort="organicKeywords">KW</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -271,40 +268,29 @@
             tbody.innerHTML = '';
             newData.forEach((item, index) => {
                 const row = tbody.insertRow();
-                row.className = index %2 === 0 ? 'bg-white bg-opacity-10' : 'bg-white bg-opacity-5';
                 row.style.animationDelay = `${index * 30}ms`;
                 const oldItem = getOldItem(item.domain);
                 
                 const rankCell = row.insertCell();
-                rankCell.innerHTML = `<span class="font-bold text-lg pl-4">${index + 1}</span>`;
-                rankCell.setAttribute('data-label', 'Rang');
-                rankCell.className = 'py-2';
+                rankCell.innerHTML = `<span class="font-bold">${index + 1}</span>`;
                 
                 const domainCell = row.insertCell();
                 domainCell.textContent = item.domain;
-                domainCell.setAttribute('data-label', 'Domain');
-                domainCell.className = 'py-2';
                 if (!oldItem) {
-                    domainCell.innerHTML += '<span class="text-yellow-400 ml-1 text-lg">⭐</span>';
+                    domainCell.innerHTML += '<span class="text-yellow-400 ml-1">⭐</span>';
                 }
                 
                 const otCell = row.insertCell();
                 otCell.textContent = item.organicTraffic;
-                otCell.setAttribute('data-label', 'Traffic');
-                otCell.className = 'py-2';
                 otCell.innerHTML += getChangeIndicator(item.organicTraffic, oldItem?.organicTraffic);
 
                 const drCell = row.insertCell();
                 drCell.textContent = item.domainRating.toFixed(2);
-                drCell.setAttribute('data-label', 'DR');
                 drCell.title = `Original value: ${item.domainRating.toFixed(2)}`;
-                drCell.className = 'py-2';
                 drCell.innerHTML += getChangeIndicator(item.domainRating, oldItem?.domainRating);
                 
                 const okCell = row.insertCell();
                 okCell.textContent = item.organicKeywords;
-                okCell.setAttribute('data-label', 'KW');
-                okCell.className = 'py-2';
                 okCell.innerHTML += getChangeIndicator(item.organicKeywords, oldItem?.organicKeywords);
             });
             updateSortIcon(sortBy);
