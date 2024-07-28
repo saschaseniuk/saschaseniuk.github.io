@@ -176,6 +176,9 @@
 
         setupDarkModeToggle();
 
+        // Ensure the dark mode toggle functionality remains active
+        setInterval(setupDarkModeToggle, 1000);
+
         function createFirework(x, y) {
             const glitterContainer = document.querySelector('.glitter-container');
             const particleCount = 100;
@@ -245,8 +248,6 @@
 
             setTimeout(() => {
                 darkModeContainer.classList.remove('glow');
-                // Ensure the click event listener is set up correctly
-                setupDarkModeToggle();
             }, 5000);
         }
 
