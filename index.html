@@ -45,19 +45,23 @@
         }
         @keyframes explode {
             0% {
-                transform: translate(0, 0);
+                transform: translate(0, 0) scale(1);
                 opacity: 1;
             }
             100% {
-                transform: translate(var(--tx), var(--ty));
+                transform: translate(var(--tx), var(--ty)) scale(2);
                 opacity: 0;
             }
+        }
+        @keyframes shuffle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
         }
     </style>
 </head>
 <body class="bg-gradient-to-br from-blue-100 to-purple-100 dark:from-gray-900 dark:to-blue-900 min-h-screen flex flex-col items-center justify-center p-4 text-gray-800 dark:text-gray-200 text-lg">
     <div class="glitter-container"></div>
-    <div class="w-full max-w-5xl glass rounded-lg shadow-lg p-8 mb-8" style="opacity: 0; transition: opacity 1s ease-in-out;">
+    <div id="leaderboardContainer" class="w-full max-w-5xl glass rounded-lg shadow-lg p-8 mb-8" style="opacity: 0; transition: opacity 1s ease-in-out;">
         <h1 class="text-4xl font-bold text-center mb-8">Blogsafari - Domain Leaderboard</h1>
         <div class="overflow-x-auto">
             <table id="leaderboardTable" class="w-full">
@@ -93,7 +97,7 @@
 
         function createFirework() {
             const glitterContainer = document.querySelector('.glitter-container');
-            const particleCount = 100;
+            const particleCount = 200;
             const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
 
             for (let i = 0; i < particleCount; i++) {
@@ -104,27 +108,53 @@
                 glitter.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
                 
                 const angle = Math.random() * Math.PI * 2;
-                const distance = Math.random() * 100 + 50;
+                const distance = Math.random() * 200 + 100;
                 const tx = Math.cos(angle) * distance;
                 const ty = Math.sin(angle) * distance;
                 
                 glitter.style.setProperty('--tx', `${tx}px`);
                 glitter.style.setProperty('--ty', `${ty}px`);
-                glitter.style.animation = `explode ${Math.random() * 0.5 + 0.5}s ease-out forwards`;
+                glitter.style.animation = `explode ${Math.random() * 1 + 1.5}s ease-out forwards`;
                 
                 glitterContainer.appendChild(glitter);
             }
 
             setTimeout(() => {
                 glitterContainer.innerHTML = '';
-            }, 1500);
+            }, 3000);
+        }
+
+        function shuffleLeaderboard() {
+            const tbody = document.querySelector('#leaderboardTable tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            let shuffleCount = 0;
+            const shuffleInterval = setInterval(() => {
+                rows.forEach(row => {
+                    row.style.animation = `shuffle 0.5s ease-in-out`;
+                });
+                setTimeout(() => {
+                    rows.sort(() => Math.random() - 0.5);
+                    tbody.innerHTML = '';
+                    rows.forEach(row => tbody.appendChild(row));
+                }, 250);
+                
+                shuffleCount++;
+                if (shuffleCount >= 5) {
+                    clearInterval(shuffleInterval);
+                    setTimeout(() => {
+                        sortAndDisplayData('organicTraffic');
+                    }, 500);
+                }
+            }, 1000);
         }
 
         window.addEventListener('load', () => {
             createFirework();
             setTimeout(() => {
-                document.querySelector('.w-full.max-w-5xl').style.opacity = '1';
-            }, 500);
+                document.getElementById('leaderboardContainer').style.opacity = '1';
+                shuffleLeaderboard();
+            }, 2000);
         });
 
         function normalizeDomain(domain) {
