@@ -32,8 +32,8 @@
         <div class="overflow-x-auto">
             <table id="leaderboardTable" class="w-full">
                 <thead>
-                    <tr class="bg-primary bg-opacity-80 text-white">
-                        <th class="p-4">Rang</th>
+                    <tr class="bg-primary bg-opacity-80 text-white text-left">
+                        <th class="p-4 pl-6">Rang</th>
                         <th class="p-4 cursor-pointer" data-sort="domain">Domain</th>
                         <th class="p-4 cursor-pointer" data-sort="domainRating">Domain Rating</th>
                         <th class="p-4 cursor-pointer" data-sort="organicTraffic">Organic Traffic</th>
@@ -132,7 +132,7 @@
                 row.style.animationDelay = `${index * 30}ms`;
                 const oldItem = getOldItem(item.domain);
                 
-                row.insertCell().innerHTML = `<span class="font-bold text-xl">${index + 1}</span>`;
+                row.insertCell().innerHTML = `<span class="font-bold text-xl pl-6">${index + 1}</span>`;
                 
                 const domainCell = row.insertCell();
                 domainCell.textContent = item.domain;
