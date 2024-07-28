@@ -104,8 +104,10 @@
                     } else if (item.domainRating < 0) {
                         item.domainRating = 0;
                     }
-                    // Round to two decimal places
-                    item.domainRating = Math.round(item.domainRating * 100) / 100;
+                    // Keep the original precision for values less than 1
+                    if (item.domainRating >= 1) {
+                        item.domainRating = Math.round(item.domainRating * 100) / 100;
+                    }
                 });
                 return removeDuplicates(data);
             } catch (error) {
@@ -157,7 +159,7 @@
                 }
                 
                 const drCell = row.insertCell();
-                drCell.textContent = item.domainRating.toFixed(2);
+                drCell.textContent = item.domainRating < 1 ? item.domainRating.toString() : item.domainRating.toFixed(2);
                 drCell.title = `Original value: ${item.domainRating}`;
                 drCell.className = 'py-3';
                 drCell.innerHTML += getChangeIndicator(item.domainRating, oldItem?.domainRating);
