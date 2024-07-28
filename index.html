@@ -26,7 +26,7 @@
         }
         @layer components {
             .responsive-table {
-                @apply w-full text-left border-collapse;
+                @apply w-full text-left border-collapse text-sm;
             }
             .responsive-table thead {
                 @apply hidden md:table-header-group;
@@ -89,11 +89,11 @@
             <table id="leaderboardTable" class="responsive-table">
                 <thead>
                     <tr class="bg-primary bg-opacity-80 text-white">
-                        <th class="p-4 pl-6">Rang</th>
-                        <th class="p-4 cursor-pointer" data-sort="domain">Domain</th>
-                        <th class="p-4 cursor-pointer" data-sort="organicTraffic">Organic Traffic</th>
-                        <th class="p-4 cursor-pointer" data-sort="domainRating">Domain Rating</th>
-                        <th class="p-4 cursor-pointer" data-sort="organicKeywords">Organic Keywords</th>
+                        <th class="p-2 pl-4">Rang</th>
+                        <th class="p-2 cursor-pointer" data-sort="domain">Domain</th>
+                        <th class="p-2 cursor-pointer" data-sort="organicTraffic">Traffic</th>
+                        <th class="p-2 cursor-pointer" data-sort="domainRating">DR</th>
+                        <th class="p-2 cursor-pointer" data-sort="organicKeywords">KW</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -276,35 +276,35 @@
                 const oldItem = getOldItem(item.domain);
                 
                 const rankCell = row.insertCell();
-                rankCell.innerHTML = `<span class="font-bold text-xl pl-6">${index + 1}</span>`;
+                rankCell.innerHTML = `<span class="font-bold text-lg pl-4">${index + 1}</span>`;
                 rankCell.setAttribute('data-label', 'Rang');
-                rankCell.className = 'py-3';
+                rankCell.className = 'py-2';
                 
                 const domainCell = row.insertCell();
                 domainCell.textContent = item.domain;
                 domainCell.setAttribute('data-label', 'Domain');
-                domainCell.className = 'py-3';
+                domainCell.className = 'py-2';
                 if (!oldItem) {
-                    domainCell.innerHTML += '<span class="text-yellow-400 ml-2 text-xl">⭐</span>';
+                    domainCell.innerHTML += '<span class="text-yellow-400 ml-1 text-lg">⭐</span>';
                 }
                 
                 const otCell = row.insertCell();
                 otCell.textContent = item.organicTraffic;
-                otCell.setAttribute('data-label', 'Organic Traffic');
-                otCell.className = 'py-3';
+                otCell.setAttribute('data-label', 'Traffic');
+                otCell.className = 'py-2';
                 otCell.innerHTML += getChangeIndicator(item.organicTraffic, oldItem?.organicTraffic);
 
                 const drCell = row.insertCell();
                 drCell.textContent = item.domainRating.toFixed(2);
-                drCell.setAttribute('data-label', 'Domain Rating');
+                drCell.setAttribute('data-label', 'DR');
                 drCell.title = `Original value: ${item.domainRating.toFixed(2)}`;
-                drCell.className = 'py-3';
+                drCell.className = 'py-2';
                 drCell.innerHTML += getChangeIndicator(item.domainRating, oldItem?.domainRating);
                 
                 const okCell = row.insertCell();
                 okCell.textContent = item.organicKeywords;
-                okCell.setAttribute('data-label', 'Organic Keywords');
-                okCell.className = 'py-3';
+                okCell.setAttribute('data-label', 'KW');
+                okCell.className = 'py-2';
                 okCell.innerHTML += getChangeIndicator(item.organicKeywords, oldItem?.organicKeywords);
             });
             updateSortIcon(sortBy);
