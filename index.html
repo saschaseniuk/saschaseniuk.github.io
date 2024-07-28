@@ -35,8 +35,8 @@
                     <tr class="bg-primary bg-opacity-80 text-white text-left">
                         <th class="p-4 pl-6">Rang</th>
                         <th class="p-4 cursor-pointer" data-sort="domain">Domain</th>
-                        <th class="p-4 cursor-pointer" data-sort="domainRating">Domain Rating</th>
                         <th class="p-4 cursor-pointer" data-sort="organicTraffic">Organic Traffic</th>
+                        <th class="p-4 cursor-pointer" data-sort="domainRating">Domain Rating</th>
                         <th class="p-4 cursor-pointer" data-sort="organicKeywords">Organic Keywords</th>
                     </tr>
                 </thead>
@@ -163,16 +163,16 @@
                     domainCell.innerHTML += '<span class="text-yellow-400 ml-2 text-xl">⭐</span>';
                 }
                 
+                const otCell = row.insertCell();
+                otCell.textContent = item.organicTraffic;
+                otCell.className = 'py-3';
+                otCell.innerHTML += getChangeIndicator(item.organicTraffic, oldItem?.organicTraffic);
+
                 const drCell = row.insertCell();
                 drCell.textContent = item.domainRating.toFixed(2);
                 drCell.title = `Original value: ${item.domainRating.toFixed(2)}`;
                 drCell.className = 'py-3';
                 drCell.innerHTML += getChangeIndicator(item.domainRating, oldItem?.domainRating);
-                
-                const otCell = row.insertCell();
-                otCell.textContent = item.organicTraffic;
-                otCell.className = 'py-3';
-                otCell.innerHTML += getChangeIndicator(item.organicTraffic, oldItem?.organicTraffic);
                 
                 const okCell = row.insertCell();
                 okCell.textContent = item.organicKeywords;
