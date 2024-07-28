@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de" class="dark">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,28 +21,25 @@
     <style type="text/tailwindcss">
         @layer utilities {
             .glass {
-                @apply bg-white bg-opacity-20 dark:bg-gray-800 dark:bg-opacity-20 backdrop-filter backdrop-blur-lg;
+                @apply bg-gray-900 bg-opacity-70 backdrop-filter backdrop-blur-lg;
             }
         }
         @layer components {
             .normal-table {
-                @apply w-full text-left border-collapse text-sm;
+                @apply w-full text-left border-collapse text-sm text-gray-300;
             }
             .normal-table th,
             .normal-table td {
                 @apply p-2;
             }
             .normal-table tr:nth-child(even) {
-                @apply bg-white bg-opacity-10;
+                @apply bg-gray-800 bg-opacity-50;
             }
             .normal-table tr:nth-child(odd) {
-                @apply bg-white bg-opacity-5;
+                @apply bg-gray-700 bg-opacity-50;
             }
             .normal-table th {
-                @apply bg-gray-800;
-            }
-            .dark .normal-table th {
-                @apply bg-gray-800;
+                @apply bg-gray-600 text-white;
             }
             @media (min-width: 768px) {
                 .normal-table {
@@ -97,15 +94,15 @@
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-blue-100 to-purple-100 min-h-screen flex flex-col items-center justify-center text-gray-800 text-lg">
+<body class="bg-gradient-to-br from-gray-900 to-purple-900 min-h-screen flex flex-col items-center justify-center text-gray-300 text-lg">
     <div class="glitter-container"></div>
     <div id="leaderboardContainer" class="w-full max-w-5xl glass rounded-lg shadow-lg p-2 sm:p-8 mb-8">
-        <h1 class="text-4xl font-bold text-center mb-4 pt-12 sm:pt-0">Blogsafari<br>Domain Leaderboard</h1>
-        <p class="text-center mb-4"><span class="text-yellow-400">⭐</span> Neue Domains seit dem letzten Update</p>
+        <h1 class="text-4xl font-bold text-center mb-4 pt-12 sm:pt-0 text-white">Blogsafari<br>Domain Leaderboard</h1>
+        <p class="text-center mb-4 text-gray-300"><span class="text-yellow-400">⭐</span> Neue Domains seit dem letzten Update</p>
         <div class="overflow-x-auto w-full">
             <table id="leaderboardTable" class="normal-table w-full">
                 <thead>
-                    <tr class="bg-primary bg-opacity-80 text-white">
+                    <tr class="bg-gray-600 text-white">
                         <th class="cursor-pointer" data-sort="rank">#</th>
                         <th class="cursor-pointer" data-sort="domain">Domain</th>
                         <th class="cursor-pointer" data-sort="organicTraffic">
