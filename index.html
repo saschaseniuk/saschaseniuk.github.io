@@ -24,6 +24,24 @@
                 @apply bg-white bg-opacity-20 dark:bg-gray-800 dark:bg-opacity-20 backdrop-filter backdrop-blur-lg;
             }
         }
+        @layer components {
+            .responsive-table {
+                @apply w-full text-left border-collapse;
+            }
+            .responsive-table thead {
+                @apply hidden md:table-header-group;
+            }
+            .responsive-table tr {
+                @apply block md:table-row mb-4 md:mb-0;
+            }
+            .responsive-table td {
+                @apply block md:table-cell;
+            }
+            .responsive-table td:before {
+                content: attr(data-label);
+                @apply font-bold md:hidden inline-block w-1/3;
+            }
+        }
     </style>
     <style>
         .glitter-container {
@@ -68,9 +86,9 @@
     <div id="leaderboardContainer" class="w-full max-w-5xl glass rounded-lg shadow-lg p-8 mb-8" style="opacity: 0; transition: opacity 1s ease-in-out;">
         <h1 class="text-4xl font-bold text-center mb-8">Blogsafari - Domain Leaderboard</h1>
         <div class="overflow-x-auto">
-            <table id="leaderboardTable" class="w-full">
+            <table id="leaderboardTable" class="responsive-table">
                 <thead>
-                    <tr class="bg-primary bg-opacity-80 text-white text-left">
+                    <tr class="bg-primary bg-opacity-80 text-white">
                         <th class="p-4 pl-6">Rang</th>
                         <th class="p-4 cursor-pointer" data-sort="domain">Domain</th>
                         <th class="p-4 cursor-pointer" data-sort="organicTraffic">Organic Traffic</th>
@@ -257,10 +275,14 @@
                 row.style.animationDelay = `${index * 30}ms`;
                 const oldItem = getOldItem(item.domain);
                 
-                row.insertCell().innerHTML = `<span class="font-bold text-xl pl-6">${index + 1}</span>`;
+                const rankCell = row.insertCell();
+                rankCell.innerHTML = `<span class="font-bold text-xl pl-6">${index + 1}</span>`;
+                rankCell.setAttribute('data-label', 'Rang');
+                rankCell.className = 'py-3';
                 
                 const domainCell = row.insertCell();
                 domainCell.textContent = item.domain;
+                domainCell.setAttribute('data-label', 'Domain');
                 domainCell.className = 'py-3';
                 if (!oldItem) {
                     domainCell.innerHTML += '<span class="text-yellow-400 ml-2 text-xl">⭐</span>';
@@ -268,17 +290,20 @@
                 
                 const otCell = row.insertCell();
                 otCell.textContent = item.organicTraffic;
+                otCell.setAttribute('data-label', 'Organic Traffic');
                 otCell.className = 'py-3';
                 otCell.innerHTML += getChangeIndicator(item.organicTraffic, oldItem?.organicTraffic);
 
                 const drCell = row.insertCell();
                 drCell.textContent = item.domainRating.toFixed(2);
+                drCell.setAttribute('data-label', 'Domain Rating');
                 drCell.title = `Original value: ${item.domainRating.toFixed(2)}`;
                 drCell.className = 'py-3';
                 drCell.innerHTML += getChangeIndicator(item.domainRating, oldItem?.domainRating);
                 
                 const okCell = row.insertCell();
                 okCell.textContent = item.organicKeywords;
+                okCell.setAttribute('data-label', 'Organic Keywords');
                 okCell.className = 'py-3';
                 okCell.innerHTML += getChangeIndicator(item.organicKeywords, oldItem?.organicKeywords);
             });
