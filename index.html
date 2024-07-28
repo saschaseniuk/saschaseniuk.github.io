@@ -26,18 +26,18 @@
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-blue-100 to-purple-100 dark:from-gray-900 dark:to-blue-900 min-h-screen flex flex-col items-center justify-center p-4 text-gray-800 dark:text-gray-200">
-    <div class="w-full max-w-4xl glass rounded-lg shadow-lg p-6 mb-8">
-        <h1 class="text-3xl font-bold text-center mb-6">Domain Leaderboard</h1>
+<body class="bg-gradient-to-br from-blue-100 to-purple-100 dark:from-gray-900 dark:to-blue-900 min-h-screen flex flex-col items-center justify-center p-4 text-gray-800 dark:text-gray-200 text-lg">
+    <div class="w-full max-w-5xl glass rounded-lg shadow-lg p-8 mb-8">
+        <h1 class="text-4xl font-bold text-center mb-8">Domain Leaderboard</h1>
         <div class="overflow-x-auto">
             <table id="leaderboardTable" class="w-full">
                 <thead>
                     <tr class="bg-primary bg-opacity-80 text-white">
-                        <th class="p-3">Rang</th>
-                        <th class="p-3 cursor-pointer" data-sort="domain">Domain</th>
-                        <th class="p-3 cursor-pointer" data-sort="domainRating">Domain Rating</th>
-                        <th class="p-3 cursor-pointer" data-sort="organicTraffic">Organic Traffic</th>
-                        <th class="p-3 cursor-pointer" data-sort="organicKeywords">Organic Keywords</th>
+                        <th class="p-4">Rang</th>
+                        <th class="p-4 cursor-pointer" data-sort="domain">Domain</th>
+                        <th class="p-4 cursor-pointer" data-sort="domainRating">Domain Rating</th>
+                        <th class="p-4 cursor-pointer" data-sort="organicTraffic">Organic Traffic</th>
+                        <th class="p-4 cursor-pointer" data-sort="organicKeywords">Organic Keywords</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -132,24 +132,28 @@
                 row.style.animationDelay = `${index * 30}ms`;
                 const oldItem = getOldItem(item.domain);
                 
-                row.insertCell().innerHTML = `<span class="font-bold">${index + 1}</span>`;
+                row.insertCell().innerHTML = `<span class="font-bold text-xl">${index + 1}</span>`;
                 
                 const domainCell = row.insertCell();
                 domainCell.textContent = item.domain;
+                domainCell.className = 'py-3';
                 if (!oldItem) {
-                    domainCell.innerHTML += '<span class="text-yellow-400 ml-1">⭐</span>';
+                    domainCell.innerHTML += '<span class="text-yellow-400 ml-2 text-xl">⭐</span>';
                 }
                 
                 const drCell = row.insertCell();
                 drCell.textContent = item.domainRating.toFixed(1);
+                drCell.className = 'py-3';
                 drCell.innerHTML += getChangeIndicator(item.domainRating, oldItem?.domainRating);
                 
                 const otCell = row.insertCell();
                 otCell.textContent = item.organicTraffic;
+                otCell.className = 'py-3';
                 otCell.innerHTML += getChangeIndicator(item.organicTraffic, oldItem?.organicTraffic);
                 
                 const okCell = row.insertCell();
                 okCell.textContent = item.organicKeywords;
+                okCell.className = 'py-3';
                 okCell.innerHTML += getChangeIndicator(item.organicKeywords, oldItem?.organicKeywords);
             });
             updateSortIcon(sortBy);
