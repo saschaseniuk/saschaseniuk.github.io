@@ -136,15 +136,15 @@
     </footer>
 
     <div class="fixed top-4 right-4 flex items-center">
-        <div id="darkModeContainer" class="flex items-center bg-gray-200 dark:bg-gray-700 rounded-lg shadow-lg transition-all duration-300">
+        <div id="darkModeContainer" class="flex items-center bg-gray-200 dark:bg-gray-700 rounded-lg shadow-lg transition-all duration-300 cursor-pointer">
             <span id="darkModeHint" class="p-2 transition-opacity duration-300">
                 Switch dark mode!
             </span>
-            <button id="darkModeToggle" class="p-2 rounded-full">
+            <div id="darkModeToggle" class="p-2 rounded-full">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                 </svg>
-            </button>
+            </div>
         </div>
     </div>
 
@@ -162,7 +162,7 @@
 
         window.addEventListener('load', handleDarkModeHint);
 
-        document.getElementById('darkModeToggle').addEventListener('click', () => {
+        document.getElementById('darkModeContainer').addEventListener('click', () => {
             document.documentElement.classList.toggle('dark');
             const darkModeContainer = document.getElementById('darkModeContainer');
             const darkModeHint = document.getElementById('darkModeHint');
