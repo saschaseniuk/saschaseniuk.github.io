@@ -97,6 +97,7 @@
         }
         .glow {
             animation: glow 1s ease-in-out infinite alternate;
+            transition: all 0.5s ease-in-out;
         }
     </style>
 </head>
@@ -157,13 +158,6 @@
             const darkModeContainer = document.getElementById('darkModeContainer');
             const darkModeHint = document.getElementById('darkModeHint');
             darkModeContainer.classList.add('glow');
-            setTimeout(() => {
-                darkModeContainer.classList.remove('glow');
-            }, 5000);
-            setTimeout(() => {
-                darkModeHint.style.opacity = '0';
-                darkModeContainer.style.width = '40px';
-            }, 10000);
         }
 
         window.addEventListener('load', handleDarkModeHint);
@@ -225,6 +219,17 @@
             const tbody = document.querySelector('#leaderboardTable tbody');
             tbody.classList.remove('blurred');
             tbody.classList.add('unblurred');
+            
+            const darkModeContainer = document.getElementById('darkModeContainer');
+            const darkModeHint = document.getElementById('darkModeHint');
+            
+            // Remove glow effect
+            darkModeContainer.classList.remove('glow');
+            
+            // Smooth transition for the hint
+            darkModeHint.style.transition = 'opacity 1s ease-in-out, width 1s ease-in-out';
+            darkModeHint.style.opacity = '0';
+            darkModeContainer.style.width = '40px';
         }
 
         window.addEventListener('load', () => {
