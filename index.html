@@ -156,12 +156,23 @@
                          .replace(/\/$/, '');
         }
 
+        function removeDuplicates(data) {
+            const uniqueDomains = new Map();
+            data.forEach(item => {
+                const existingItem = uniqueDomains.get(item.domain);
+                if (!existingItem || item.domainRating > existingItem.domainRating) {
+                    uniqueDomains.set(item.domain, item);
+                }
+            });
+            return Array.from(uniqueDomains.values());
+        }
+
         async function loadCSV(url) {
             try {
                 const response = await fetch(url);
                 const csvText = await response.text();
                 const rows = csvText.split('\n').slice(1);
-                return rows.map(row => {
+                const data = rows.map(row => {
                     const [domain, domainRating, organicTraffic, organicKeywords] = row.split(',');
                     return {
                         domain: normalizeDomain(domain),
@@ -170,6 +181,7 @@
                         organicKeywords: parseInt(organicKeywords)
                     };
                 }).filter(item => !isNaN(item.domainRating));
+                return removeDuplicates(data);
             } catch (error) {
                 console.error('Error loading CSV:', error);
                 return [];
