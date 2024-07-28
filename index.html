@@ -88,9 +88,10 @@
                     const [domain, ...rest] = row.split(',');
                     if (!domain) return null; // Skip empty rows
                     const [domainRating, organicTraffic, organicKeywords] = rest.slice(-3); // Take last 3 elements
+                    const parsedDR = parseFloat(domainRating.replace(',', '.'));
                     return {
                         domain: normalizeDomain(domain),
-                        domainRating: parseFloat(domainRating.replace(',', '.')),
+                        domainRating: parsedDR,
                         organicTraffic: parseInt(organicTraffic),
                         organicKeywords: parseInt(organicKeywords)
                     };
@@ -99,7 +100,7 @@
                 // Normalize Domain Rating to ensure it's between 0 and 100
                 data.forEach(item => {
                     if (item.domainRating < 1) {
-                        item.domainRating *= 100;
+                        item.domainRating = Math.round(item.domainRating * 100) / 100;
                     }
                 });
                 return removeDuplicates(data);
@@ -152,7 +153,7 @@
                 }
                 
                 const drCell = row.insertCell();
-                drCell.textContent = item.domainRating.toFixed(1);
+                drCell.textContent = item.domainRating.toFixed(2);
                 drCell.title = `Original value: ${item.domainRating}`;
                 drCell.className = 'py-3';
                 drCell.innerHTML += getChangeIndicator(item.domainRating, oldItem?.domainRating);
