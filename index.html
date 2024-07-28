@@ -223,14 +223,23 @@
             const darkModeContainer = document.getElementById('darkModeContainer');
             const darkModeHint = document.getElementById('darkModeHint');
             
-            // Remove glow effect
-            darkModeContainer.classList.remove('glow');
-            
-            // Slower and smoother transition for the hint
-            darkModeHint.style.transition = 'opacity 3s ease-in-out, width 3s ease-in-out';
-            darkModeHint.style.opacity = '0';
-            darkModeContainer.style.transition = 'width 3s ease-in-out';
-            darkModeContainer.style.width = '40px';
+            // Gradual transition from glow to switch
+            setTimeout(() => {
+                darkModeContainer.style.transition = 'box-shadow 2s ease-in-out';
+                darkModeContainer.style.boxShadow = 'none';
+            }, 1000);
+
+            setTimeout(() => {
+                darkModeHint.style.transition = 'opacity 2s ease-in-out, width 2s ease-in-out';
+                darkModeHint.style.opacity = '0';
+                darkModeContainer.style.transition = 'width 2s ease-in-out, background-color 2s ease-in-out';
+                darkModeContainer.style.width = '40px';
+                darkModeContainer.style.backgroundColor = 'rgba(107, 114, 128, 0.5)'; // Adjust this color as needed
+            }, 3000);
+
+            setTimeout(() => {
+                darkModeContainer.classList.remove('glow');
+            }, 5000);
         }
 
         window.addEventListener('load', () => {
