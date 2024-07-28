@@ -14,6 +14,9 @@
             max-width: 1000px;
             margin: 0 auto;
             padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
         h1 {
@@ -87,6 +90,39 @@
         tbody tr {
             animation: fadeIn 0.5s ease-out;
         }
+
+        .change-indicator {
+            margin-left: 5px;
+            font-size: 0.8em;
+        }
+
+        .new-domain {
+            margin-left: 5px;
+            color: #f39c12;
+        }
+
+        .change-up {
+            color: #27ae60;
+        }
+
+        .change-down {
+            color: #c0392b;
+        }
+
+        footer {
+            margin-top: auto;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -104,9 +140,15 @@
         <tbody></tbody>
     </table>
 
+    <footer>
+        <a href="impressum.html">Impressum</a>
+    </footer>
+
     <script>
-        const csvUrl = 'blogsafari.csv';
-        let data = [];
+        const newCsvUrl = 'blogsafari.csv';
+        const oldCsvUrl = 'blogsafari_old.csv';
+        let newData = [];
+        let oldData = [];
 
         function normalizeDomain(domain) {
             return domain.toLowerCase()
@@ -114,12 +156,12 @@
                          .replace(/\/$/, '');
         }
 
-        async function loadCSV() {
+        async function loadCSV(url) {
             try {
-                const response = await fetch(csvUrl);
+                const response = await fetch(url);
                 const csvText = await response.text();
                 const rows = csvText.split('\n').slice(1);
-                data = rows.map(row => {
+                return rows.map(row => {
                     const [domain, domainRating, organicTraffic, organicKeywords] = row.split(',');
                     return {
                         domain: normalizeDomain(domain),
@@ -128,14 +170,31 @@
                         organicKeywords: parseInt(organicKeywords)
                     };
                 }).filter(item => !isNaN(item.domainRating));
-                sortAndDisplayData('domainRating');
             } catch (error) {
                 console.error('Error loading CSV:', error);
+                return [];
             }
         }
 
+        async function loadData() {
+            [newData, oldData] = await Promise.all([loadCSV(newCsvUrl), loadCSV(oldCsvUrl)]);
+            sortAndDisplayData('domainRating');
+        }
+
+        function getOldItem(domain) {
+            return oldData.find(item => item.domain === domain) || null;
+        }
+
+        function getChangeIndicator(newValue, oldValue) {
+            if (oldValue === null) return '';
+            const diff = newValue - oldValue;
+            if (diff > 0) return `<span class="change-indicator change-up">⬆️ ${diff.toFixed(1)}</span>`;
+            if (diff < 0) return `<span class="change-indicator change-down">⬇️ ${Math.abs(diff).toFixed(1)}</span>`;
+            return '';
+        }
+
         function sortAndDisplayData(sortBy) {
-            data.sort((a, b) => {
+            newData.sort((a, b) => {
                 if (sortBy === 'domain') {
                     return a[sortBy].localeCompare(b[sortBy]);
                 } else {
@@ -144,17 +203,33 @@
             });
             const tbody = document.querySelector('#leaderboardTable tbody');
             tbody.innerHTML = '';
-            data.forEach((item, index) => {
+            newData.forEach((item, index) => {
                 const row = tbody.insertRow();
                 row.style.animationDelay = `${index * 30}ms`;
                 if (index < 30) {
                     row.classList.add('top-30');
                 }
+                const oldItem = getOldItem(item.domain);
+                
                 row.insertCell().innerHTML = `<span class="rank">${index + 1}</span>`;
-                row.insertCell().textContent = item.domain;
-                row.insertCell().textContent = item.domainRating.toFixed(1);
-                row.insertCell().textContent = item.organicTraffic;
-                row.insertCell().textContent = item.organicKeywords;
+                
+                const domainCell = row.insertCell();
+                domainCell.textContent = item.domain;
+                if (!oldItem) {
+                    domainCell.innerHTML += '<span class="new-domain">⭐</span>';
+                }
+                
+                const drCell = row.insertCell();
+                drCell.textContent = item.domainRating.toFixed(1);
+                drCell.innerHTML += getChangeIndicator(item.domainRating, oldItem?.domainRating);
+                
+                const otCell = row.insertCell();
+                otCell.textContent = item.organicTraffic;
+                otCell.innerHTML += getChangeIndicator(item.organicTraffic, oldItem?.organicTraffic);
+                
+                const okCell = row.insertCell();
+                okCell.textContent = item.organicKeywords;
+                okCell.innerHTML += getChangeIndicator(item.organicKeywords, oldItem?.organicKeywords);
             });
             updateSortIcon(sortBy);
         }
@@ -175,7 +250,7 @@
             });
         });
 
-        loadCSV();
+        loadData();
     </script>
     <script defer src="https://cloud.umami.is/script.js" data-website-id="e33055b6-904e-4cb7-b5c5-5f87a6fb580a"></script>
 </body>
