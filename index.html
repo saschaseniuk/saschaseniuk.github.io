@@ -162,13 +162,15 @@
 
         window.addEventListener('load', handleDarkModeHint);
 
-        document.getElementById('darkModeContainer').addEventListener('click', () => {
+        function toggleDarkMode() {
             document.documentElement.classList.toggle('dark');
             const darkModeContainer = document.getElementById('darkModeContainer');
             const darkModeHint = document.getElementById('darkModeHint');
             darkModeHint.style.opacity = '0';
             darkModeContainer.style.width = '40px';
-        });
+        }
+
+        document.getElementById('darkModeContainer').addEventListener('click', toggleDarkMode);
 
         function createFirework(x, y) {
             const glitterContainer = document.querySelector('.glitter-container');
@@ -239,6 +241,9 @@
 
             setTimeout(() => {
                 darkModeContainer.classList.remove('glow');
+                // Re-add the click event listener to ensure it works after transitions
+                darkModeContainer.removeEventListener('click', toggleDarkMode);
+                darkModeContainer.addEventListener('click', toggleDarkMode);
             }, 5000);
         }
 
